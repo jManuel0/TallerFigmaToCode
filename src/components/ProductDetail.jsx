@@ -1,6 +1,40 @@
 import { useState } from 'react'
 
-const extras = [
+const productDescriptions = {
+  'Biryani Bliss': 'Aromatic basmati rice layered with tender marinated chicken, saffron, and a blend of traditional Indian spices. Slow-cooked to perfection in a sealed pot for rich, deep flavors.',
+  'Pizza Bliss': 'Experience the perfect blend of fresh mozzarella, tangy tomato sauce, and our signature thin crust. Hand-kneaded dough rested for 24 hours to ensure an airy, crisp finish that melts in your mouth.',
+  'Burger Bliss': 'A juicy quarter-pound beef patty grilled to perfection, topped with melted cheddar, crisp lettuce, ripe tomatoes, pickles, and our secret house sauce on a toasted brioche bun.',
+  'Sandwich Bliss': 'Freshly baked artisan bread loaded with premium sliced turkey, creamy avocado, Swiss cheese, crunchy veggies, and a drizzle of honey mustard dressing.',
+  'Hyderabadi Biryani': 'The legendary Hyderabadi dum biryani with succulent goat meat, fragrant basmati rice, crispy onions, fresh herbs, and a side of cooling raita.',
+  'Veg Burger': 'A hearty plant-based patty made with black beans, quinoa, and roasted vegetables, topped with fresh avocado, sprouts, and chipotle aioli.',
+  'Paneer Burger': 'Crispy paneer tikka patty marinated in tandoori spices, layered with mint chutney, pickled onions, and fresh greens on a butter-toasted bun.',
+  'Margherita': 'Classic Italian pizza with San Marzano tomato sauce, fresh buffalo mozzarella, fragrant basil leaves, and a drizzle of extra virgin olive oil on a wood-fired crust.',
+}
+
+const productExtras = {
+  'Biryani Bliss': [
+    { id: 1, name: 'Indian Spices', price: 0.50, image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=100&h=100&fit=crop&q=80' },
+    { id: 2, name: 'Raita', price: 1.00, image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=100&h=100&fit=crop&q=80' },
+    { id: 3, name: 'Naan Bread', price: 1.50, image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=100&h=100&fit=crop&q=80' },
+  ],
+  'Pizza Bliss': [
+    { id: 1, name: 'Extra Basil', price: 0.50, image: 'https://images.unsplash.com/photo-1618164435735-413d3b066c9a?w=100&h=100&fit=crop&q=80' },
+    { id: 2, name: 'Parmesan', price: 1.20, image: 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=100&h=100&fit=crop&q=80' },
+    { id: 3, name: 'Olives', price: 0.80, image: 'https://images.unsplash.com/photo-1563288105-db0fa9c7e834?w=100&h=100&fit=crop&q=80' },
+  ],
+  'Burger Bliss': [
+    { id: 1, name: 'Extra Cheese', price: 1.00, image: 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=100&h=100&fit=crop&q=80' },
+    { id: 2, name: 'Bacon', price: 1.50, image: 'https://images.unsplash.com/photo-1606851094655-b3b5a1249a4d?w=100&h=100&fit=crop&q=80' },
+    { id: 3, name: 'Jalapeños', price: 0.60, image: 'https://images.unsplash.com/photo-1583119022894-919a68a3d0e3?w=100&h=100&fit=crop&q=80' },
+  ],
+  'Sandwich Bliss': [
+    { id: 1, name: 'Avocado', price: 1.20, image: 'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=100&h=100&fit=crop&q=80' },
+    { id: 2, name: 'Extra Turkey', price: 1.80, image: 'https://images.unsplash.com/photo-1606851094655-b3b5a1249a4d?w=100&h=100&fit=crop&q=80' },
+    { id: 3, name: 'Swiss Cheese', price: 0.80, image: 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=100&h=100&fit=crop&q=80' },
+  ],
+}
+
+const defaultExtras = [
   { id: 1, name: 'Extra Basil', price: 0.50, image: 'https://images.unsplash.com/photo-1618164435735-413d3b066c9a?w=100&h=100&fit=crop&q=80' },
   { id: 2, name: 'Parmesan', price: 1.20, image: 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=100&h=100&fit=crop&q=80' },
   { id: 3, name: 'Olives', price: 0.80, image: 'https://images.unsplash.com/photo-1563288105-db0fa9c7e834?w=100&h=100&fit=crop&q=80' },
@@ -13,7 +47,11 @@ export default function ProductDetail({ product, onBack }) {
   const [quantity, setQuantity] = useState(1)
   const [selectedExtras, setSelectedExtras] = useState([])
 
+  const productName = product?.name || 'Pizza Bliss'
   const basePrice = product?.price || 14.99
+  const extras = productExtras[productName] || defaultExtras
+  const description = productDescriptions[productName] || productDescriptions['Pizza Bliss']
+
   const sizeMultiplier = selectedSize === 'Small' ? 0.8 : selectedSize === 'Large' ? 1.3 : 1
   const extrasTotal = selectedExtras.reduce((sum, id) => {
     const extra = extras.find((e) => e.id === id)
@@ -31,10 +69,10 @@ export default function ProductDetail({ product, onBack }) {
     <div className="min-h-screen bg-white max-w-lg mx-auto relative">
       {/* Hero Image */}
       <div className="relative h-72 bg-gradient-to-b from-red-900 via-red-800 to-red-900 overflow-hidden">
-        {/* Faint background text */}
+        {/* Watermark — product name */}
         <div className="absolute inset-0 flex items-center justify-center opacity-10">
-          <span className="text-[80px] font-black text-white uppercase tracking-widest whitespace-nowrap">
-            {product?.badge || 'SAFE WORK'}
+          <span className="text-[70px] font-black text-white uppercase tracking-widest whitespace-nowrap">
+            {productName.toUpperCase()}
           </span>
         </div>
 
@@ -42,7 +80,7 @@ export default function ProductDetail({ product, onBack }) {
         <div className="absolute inset-0 flex items-center justify-center">
           <img
             src={product?.image || 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=400&fit=crop&q=80'}
-            alt={product?.name || 'Pizza Bliss'}
+            alt={productName}
             className="w-52 h-52 object-cover rounded-full shadow-2xl border-4 border-white/20"
           />
         </div>
@@ -71,14 +109,12 @@ export default function ProductDetail({ product, onBack }) {
 
       {/* Content Card */}
       <div className="relative -mt-8 bg-white rounded-t-[32px] px-6 pt-8 pb-28">
-        {/* Name + Price row */}
+        {/* Name + Price */}
         <div className="flex items-start justify-between mb-1">
-          <h1 className="text-2xl font-extrabold text-text-primary">
-            {product?.name || 'Pizza Bliss'}
-          </h1>
+          <h1 className="text-2xl font-extrabold text-text-primary">{productName}</h1>
           <div className="text-right flex-shrink-0 ml-4">
             <p className="text-2xl font-extrabold text-primary">${basePrice.toFixed(2)}</p>
-            <p className="text-xs text-text-secondary">480 Cal</p>
+            <p className="text-xs text-text-secondary">{product?.calories || '480 Cal'}</p>
           </div>
         </div>
 
@@ -94,9 +130,7 @@ export default function ProductDetail({ product, onBack }) {
         {/* Description */}
         <div className="mb-6">
           <h3 className="text-[11px] font-bold text-text-secondary uppercase tracking-[0.15em] mb-2">Description</h3>
-          <p className="text-sm text-text-secondary leading-relaxed">
-            Experience the perfect blend of fresh mozzarella, tangy tomato sauce, and our signature thin crust. Hand-kneaded dough rested for 24 hours to ensure an airy, crisp finish that melts in your mouth.
-          </p>
+          <p className="text-sm text-text-secondary leading-relaxed">{description}</p>
         </div>
 
         {/* Select Size */}
